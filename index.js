@@ -11,30 +11,28 @@ const app = express();
 app.use(fileUpload());
 
 app.post('/upload', async (req, res) => {
-  let sampleFile;
-  let uploadPath;
-
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
 
   const fileId = nanoid();
-  sampleFile = req.files.file;
+  const uploadedFile = req.files.file;
+  const ext = fileExtension(uploadedFile.name);
 
-  const ext = fileExtension(sampleFile.name);
   const uploadPathFile = __dirname + '/uploads/' + fileId;
   const uploadPathMetadata = __dirname + '/uploads/' + fileId + '.json';
+  
   const metadata = {
-    name: sampleFile.name,
-    mimetype: sampleFile.mimetype,
-    md5: sampleFile.md5,
-    size: sampleFile.size,
+    name: uploadedFile.name,
+    mimetype: uploadedFile.mimetype,
+    md5: uploadedFile.md5,
+    size: uploadedFile.size,
     dateCreated: (+new Date()/1000).toFixed(0),
     fileId,
     ext,
   };
 
-  sampleFile.mv(uploadPathFile, (err) => {
+  uploadedFile.mv(uploadPathFile, (err) => {
     if (err)
       return res.status(500).json({err, status: 'ERROR'});
     fs.writeFileSync(uploadPathMetadata, JSON.stringify(metadata, null, 2));
@@ -45,6 +43,7 @@ app.post('/upload', async (req, res) => {
 app.get('/file/:fileId', async(req, res) => {
   const {fileId} = req.params;
   console.log('f', fileId);
+
   const uploadPathFile = __dirname + '/uploads/' + fileId;
   const uploadPathMetadata = __dirname + '/uploads/' + fileId + '.json';
 
