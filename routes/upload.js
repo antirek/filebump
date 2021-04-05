@@ -22,6 +22,7 @@ const prepareMetadata = (uploadedFile) => {
   };
 };
 
+const authHeader = config.authHeader || 'X-API-Key';
 const authFn = (key) => {
   if (!key) return false;
   return config.keys.includes(key);
@@ -31,7 +32,7 @@ const router = express.Router();
 router.use(fileUpload());
 router.use(checkAuthHeader({
   authFn,
-  authHeader: 'X-API-Key',
+  authHeader,
   excludes: [],
   status401onFail: true,
 }));
@@ -40,6 +41,9 @@ router.post('/', async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
+
+  const key = req.get(authHeader);
+  console.log('upload with key', key);
 
   const fileId = nanoid();
   const uploadedFile = req.files.file;
@@ -52,7 +56,12 @@ router.post('/', async (req, res) => {
   const uploadPathFile = path.join(subDirPath, fileId);
   const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
   
-  const metadata = { ...prepareMetadata(uploadedFile), fileId };
+  const metadata = { 
+    ...prepareMetadata(uploadedFile),
+    fileId,
+    key,
+  };
+  console.log('upload', JSON.stringify(metadata));
   uploadedFile.mv(uploadPathFile, (err) => {
     if (err)
       return res.status(500).json({err, status: 'ERROR'});
