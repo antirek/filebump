@@ -34,7 +34,7 @@ router.use(checkAuthHeader({
   authHeader: 'X-API-Key',
   excludes: [],
   status401onFail: true,
-}))
+}));
 
 router.post('/', async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {

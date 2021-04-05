@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/antirek/filestore#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "check-auth-header": "^0.0.3",
     "config": "^3.3.6",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "file-extension": "^4.0.5",
+    "form-data": "^4.0.0",
     "nanoid": "^3.1.22"
   }
 }
