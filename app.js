@@ -7,7 +7,7 @@ const downloadRouter = require('./routes/download');
 const app = express();
 
 app.use('/upload', uploadRouter);
-app.use('/download', downloadRouter);
+app.use('/file', downloadRouter);
 
 app.listen(config.port, () => {
   console.log('app started with config:', config);
