@@ -3,17 +3,33 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const axios = require('axios');
+const checkAuthHeader = require('check-auth-header');
 
 const {getId} = require('../getId');
 
+const authHeader = config.authHeader || 'X-API-Key';
+const authFn = (key) => {
+  if (!key) return false;
+  return config.keys.includes(key);
+}
+
 const router = express.Router();
 router.use(express.json());
+router.use(checkAuthHeader({
+  authFn,
+  authHeader,
+  excludes: [],
+  status401onFail: true,
+}));
 
 router.post('/', async (req, res) => {
   try {
     const downloadUrl = req.body.url;
     const fileId = getId();
 
+    const key = req.get(authHeader);
+    console.log('download with key', key);
+  
     res.json({
       fileId,
       url: `${config.baseUrl}/file/${fileId}`,
@@ -28,6 +44,7 @@ router.post('/', async (req, res) => {
       mimetype: response.headers['content-type'],
       size: response.headers['content-length'],
       dateCreated: (+new Date()/1000).toFixed(0),
+      key,
     };
 
     const subDirId = fileId.substring(0, 4);
