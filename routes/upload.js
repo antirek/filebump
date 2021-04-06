@@ -1,14 +1,12 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const { customAlphabet } = require('nanoid');
 const fileExtension = require('file-extension');
 const fs = require('fs');
 const path = require('path');
 const checkAuthHeader = require('check-auth-header');
 const config = require('config');
 
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const nanoid = customAlphabet(alphabet, 36);
+const {getId} = require('../getId');
 
 const prepareMetadata = (uploadedFile) => {
   const ext = fileExtension(uploadedFile.name);
@@ -45,7 +43,7 @@ router.post('/', async (req, res) => {
   const key = req.get(authHeader);
   console.log('upload with key', key);
 
-  const fileId = nanoid();
+  const fileId = getId();
   const uploadedFile = req.files.file;
 
   const subDirId = fileId.substring(0, 4);
@@ -66,6 +64,7 @@ router.post('/', async (req, res) => {
     if (err)
       return res.status(500).json({err, status: 'ERROR'});
     fs.writeFileSync(uploadPathMetadata, JSON.stringify(metadata, null, 2));
+    
     res.json({
       fileId,
       url: `${config.baseUrl}/file/${fileId}`,
