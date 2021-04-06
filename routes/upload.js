@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
     fs.writeFileSync(uploadPathMetadata, JSON.stringify(metadata, null, 2));
     res.json({
       fileId,
-      url: `${config.baseUrl}/download/${fileId}`,
+      url: `${config.baseUrl}/file/${fileId}`,
       status: 'OK',
     });
   });
