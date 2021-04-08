@@ -5,10 +5,10 @@ const config = require('config');
 
 const router = express.Router();
 
-router.get('/:fileId', async(req, res) => {
+const processFileGet = async(req, res) => {
   try {
-    const {fileId} = req.params;
-    console.log('GET', fileId);
+    const {fileId, filename} = req.params;
+    console.log('GET', JSON.stringify({fileId, filename}));
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
@@ -34,6 +34,9 @@ router.get('/:fileId', async(req, res) => {
     console.log(err);
     res.status(500).send();
   }
-});
+}
+
+router.get('/:fileId', processFileGet);
+router.get('/:fileId/:filename', processFileGet);
 
 module.exports = router;
