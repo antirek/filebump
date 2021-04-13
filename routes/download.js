@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const config = require('config');
 const axios = require('axios');
@@ -49,15 +49,15 @@ router.post('/', async (req, res) => {
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
-    fs.mkdirSync(subDirPath, { recursive: true });
+    await fs.mkdir(subDirPath, { recursive: true });
   
     const uploadPathFile = path.join(subDirPath, fileId);
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
 
-    fs.writeFileSync(uploadPathFile, response.data, {
+    await fs.writeFile(uploadPathFile, response.data, {
       encoding: 'binary',
     });
-    fs.writeFileSync(uploadPathMetadata, JSON.stringify(metadata, null, 2));
+    await fs.writeFile(uploadPathMetadata, JSON.stringify(metadata, null, 2));
 
     console.log('file download success', fileId);
   } catch (err) {

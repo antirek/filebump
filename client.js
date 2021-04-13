@@ -6,7 +6,7 @@ const run = async () => {
   const form = new FormData();
   form.append('file', fs.createReadStream('test.pdf'));
 
-  const url = 'http://localhost:3000/upload/';
+  const url = 'http://localhost:3007/upload/';
 
   const request_config = {
     headers: {

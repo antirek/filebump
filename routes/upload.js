@@ -1,7 +1,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const fileExtension = require('file-extension');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const checkAuthHeader = require('check-auth-header');
 const config = require('config');
@@ -49,27 +49,25 @@ router.post('/', async (req, res) => {
   const subDirId = fileId.substring(0, 4);
   
   const subDirPath = path.join(config.uploadDir, subDirId);
-  fs.mkdirSync(subDirPath, { recursive: true });
+  await fs.mkdir(subDirPath, { recursive: true });
   
   const uploadPathFile = path.join(subDirPath, fileId);
   const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
   
-  const metadata = { 
+  const metadata = {
     ...prepareMetadata(uploadedFile),
     fileId,
     key,
   };
   console.log('upload', JSON.stringify(metadata));
-  uploadedFile.mv(uploadPathFile, (err) => {
-    if (err)
-      return res.status(500).json({err, status: 'ERROR'});
-    fs.writeFileSync(uploadPathMetadata, JSON.stringify(metadata, null, 2));
-    
-    res.json({
-      fileId,
-      url: `${config.baseUrl}/file/${fileId}`,
-      status: 'OK',
-    });
+
+  await uploadedFile.mv(uploadPathFile);
+  await fs.writeFile(uploadPathMetadata, JSON.stringify(metadata, null, 2));
+
+  res.json({
+    fileId,
+    url: `${config.baseUrl}/file/${fileId}`,
+    status: 'OK',
   });
 });
 

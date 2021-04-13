@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const config = require('config');
 
@@ -16,13 +16,14 @@ const processFileGet = async(req, res) => {
     const uploadPathFile = path.join(subDirPath, fileId);
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
     
-    if (!fs.existsSync(uploadPathFile)) {
+    if (!(await fs.access(uploadPathFile))) {
       res.status(404).json({status: 'NOT FOUND'});
       console.log('not found file', fileId);
       return;
     }
 
-    const metadata = JSON.parse(fs.readFileSync(uploadPathMetadata));
+    const metadataFileData = await fs.readFile(uploadPathMetadata);
+    const metadata = JSON.parse(metadataFileData);
     console.log('m', metadata);
 
     res.sendFile(uploadPathFile, {
