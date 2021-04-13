@@ -1,6 +1,5 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const fileExtension = require('file-extension');
 const fs = require('fs/promises');
 const path = require('path');
 const checkAuthHeader = require('check-auth-header');
@@ -16,7 +15,6 @@ const prepareMetadata = (uploadedFile) => {
     md5: uploadedFile.md5,
     size: uploadedFile.size,
     dateCreated: (+new Date()/1000).toFixed(0),
-    ext,
   };
 };
 

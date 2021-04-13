@@ -1,21 +1,59 @@
-const FormData = require('form-data'); // npm install --save form-data
-const fs = require('fs');
+const FormData = require('form-data');
+const fs = require('fs/promises');
 const axios = require('axios');
 
+class FilebumpClient {
+  constructor ({url, key}) {
+    this.url = url;
+    this.key = key;
+  }
+
+  async upload(data, filename) {
+    const form = new FormData();
+    form.append('file', data, filename);
+
+    const request_config = {
+      headers: {
+        'X-API-Key': this.key,
+        ...form.getHeaders(),
+      }
+    };
+
+    const url = `${this.url}/upload`;
+    return await axios.post(url, form, request_config);    
+  }
+
+  async download(downloadUrl) {
+    const request_config = {
+      headers: {
+        'X-API-Key': this.key,
+      }
+    };
+
+    const url = `${this.url}/download`;
+    return await axios.post(url, {url: downloadUrl}, request_config);
+  }
+
+  async file(fileId) {
+    const request_config = {
+      headers: {
+        'X-API-Key': this.key,
+      }
+    };
+
+    const url = `${this.url}/file/${fileId}`;
+    return await axios.get(url, request_config);
+  }
+}
+
 const run = async () => {
-  const form = new FormData();
-  form.append('file', fs.createReadStream('test.pdf'));
+  const url = 'http://localhost:3007';
+  const client = new FilebumpClient({url, key: 'test'});
+  
+  const filename = 'test.pdf';
+  const data = await fs.readFile(filename);
 
-  const url = 'http://localhost:3007/upload/';
-
-  const request_config = {
-    headers: {
-      'X-API-Key': 'test',
-      ...form.getHeaders()
-    }
-  };
-
-  const resp = await axios.post(url, form, request_config);
+  const resp = await client.upload(data, filename);  
   console.log(resp.data);
 }
 

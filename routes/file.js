@@ -16,12 +16,14 @@ const processFileGet = async(req, res) => {
     const uploadPathFile = path.join(subDirPath, fileId);
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
     
-    if (!(await fs.access(uploadPathFile))) {
+    try {
+      await fs.access(uploadPathFile);
+    } catch (e) {
       res.status(404).json({status: 'NOT FOUND'});
       console.log('not found file', fileId);
       return;
     }
-
+    
     const metadataFileData = await fs.readFile(uploadPathMetadata);
     const metadata = JSON.parse(metadataFileData);
     console.log('m', metadata);
