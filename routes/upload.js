@@ -8,7 +8,6 @@ const config = require('config');
 const {getId} = require('../getId');
 
 const prepareMetadata = (uploadedFile) => {
-  const ext = fileExtension(uploadedFile.name);
   return {
     name: uploadedFile.name,
     mimetype: uploadedFile.mimetype,
