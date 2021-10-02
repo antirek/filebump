@@ -1,4 +1,3 @@
-const config = require('config');
 const express = require('express');
 const cors = require('cors');
 
@@ -6,13 +5,17 @@ const uploadRouter = require('./routes/upload');
 const downloadRouter = require('./routes/download');
 const fileRouter = require('./routes/file');
 
-const app = express();
+const createApp = (config) => {
+  const app = express();
 
-app.use(cors());
-app.use('/upload', uploadRouter);
-app.use('/download', downloadRouter);
-app.use('/file', fileRouter);
+  app.use(cors());
+  app.use('/upload', uploadRouter);
+  app.use('/download', downloadRouter);
+  app.use('/file', fileRouter);
 
-app.listen(config.port, () => {
-  console.log('app started with config:', config);
-});
+  return app;
+}
+
+module.exports = {
+  createApp,
+}

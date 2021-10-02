@@ -1,5 +1,4 @@
 const FormData = require('form-data');
-const fs = require('fs/promises');
 const axios = require('axios');
 
 class FilebumpClient {
@@ -46,15 +45,6 @@ class FilebumpClient {
   }
 }
 
-const run = async () => {
-  const url = 'http://localhost:3007';
-  const client = new FilebumpClient({url, key: 'test'});
-  
-  const filename = 'test.pdf';
-  const data = await fs.readFile(filename);
-
-  const resp = await client.upload(data, filename);  
-  console.log(resp.data);
+module.exports = {
+  FilebumpClient,
 }
-
-(run)();
