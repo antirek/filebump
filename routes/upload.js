@@ -17,6 +17,16 @@ const prepareMetadata = (uploadedFile) => {
   };
 };
 
+const postUploadAction = async (metadata) => {
+  if (metadata.mimetype !== 'audio/ogg') {
+    return console.log(`${metadata.mimetype}: post actions for uploaded mimetype is not defined`);
+  }
+
+  if (metadata.mimetype === 'audio/ogg') {
+    console.log(`${metadata.mimetype}: start post upload action`);
+  }
+}
+
 const authHeader = config.authHeader || 'X-API-Key';
 const authFn = (key) => {
   if (!key) return false;
@@ -66,6 +76,8 @@ router.post('/', async (req, res) => {
     url: `${config.baseUrl}/file/${fileId}`,
     status: 'OK',
   });
+
+  await postUploadAction(metadata);
 });
 
 module.exports = router;
