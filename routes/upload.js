@@ -1,9 +1,12 @@
-const express = require('express');
-const fileUpload = require('express-fileupload');
 const fs = require('fs/promises');
 const path = require('path');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const checkAuthHeader = require('check-auth-header');
 const config = require('config');
+const express = require('express');
+const fileUpload = require('express-fileupload');
+
 
 const {getId} = require('../getId');
 
@@ -24,6 +27,16 @@ const postUploadAction = async (metadata) => {
 
   if (metadata.mimetype === 'audio/ogg') {
     console.log(`${metadata.mimetype}: start post upload action`);
+    const fileId = metadata.fileId;
+
+    const subDirId = fileId.substring(0, 4);
+  
+    const subDirPath = path.join(config.uploadDir, subDirId);
+    await fs.mkdir(subDirPath, { recursive: true });
+    
+    const uploadPathFile = path.join(subDirPath, fileId);
+    const { stdout, stderr } = await exec(`ffmpeg -i ${uploadPathFile} ${uploadPathFile}.mp3`);
+    console.log(stdout, stderr);
   }
 }
 

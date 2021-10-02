@@ -29,6 +29,7 @@
     "nanoid": "^3.1.22"
   },
   "devDependencies": {
+    "delay": "^5.0.0",
     "jest": "^27.2.4"
   }
 }

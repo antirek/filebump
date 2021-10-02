@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const delay = require('delay');
 
 const {FilebumpClient} = require('../client');
 const {createApp} = require('../app');
@@ -50,6 +51,7 @@ describe('test upload', () => {
   });  
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await delay(2000)
   server.close();
 });

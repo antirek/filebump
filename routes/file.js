@@ -7,13 +7,21 @@ const router = express.Router();
 
 const processFileGet = async(req, res) => {
   try {
+    let isRequiredMp3 = false;    
     const {fileId, filename} = req.params;
     console.log('GET', JSON.stringify({fileId, filename}));
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
 
-    const uploadPathFile = path.join(subDirPath, fileId);
+    let uploadPathFile = path.join(subDirPath, fileId);
+
+    if (filename && path.extname(filename) === '.mp3') {
+      uploadPathFile = uploadPathFile + '.mp3';
+      console.log('required mp3 file', uploadPathFile);
+      isRequiredMp3 = true;
+    }
+    
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
     
     try {
@@ -26,11 +34,11 @@ const processFileGet = async(req, res) => {
     
     const metadataFileData = await fs.readFile(uploadPathMetadata);
     const metadata = JSON.parse(metadataFileData);
-    console.log('m', metadata);
+    console.log('metadata', metadata);
 
     res.sendFile(uploadPathFile, {
       headers: {
-        'Content-Type': metadata.mimetype,
+        'Content-Type': isRequiredMp3 ? 'audio/mpeg' : metadata.mimetype,
       },
     });
   } catch (err) {
