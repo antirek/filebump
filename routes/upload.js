@@ -63,7 +63,9 @@ router.post('/', async (req, res) => {
   const key = req.get(authHeader);
   console.log('upload with key', key);
 
-  const fileId = getId();
+  console.log(req.query.fileId);
+
+  const fileId = req.query.fileId ? req.query.fileId : getId();
   const uploadedFile = req.files.file;
 
   const subDirId = fileId.substring(0, 4);
