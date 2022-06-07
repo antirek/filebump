@@ -54,15 +54,12 @@ router.post('/', async (req, res) => {
     const uploadPathFile = path.join(subDirPath, fileId);
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
 
-    await fs.writeFile(uploadPathFile, response.data, {
-      encoding: 'binary',
-    });
+    await fs.writeFile(uploadPathFile, response.data, {encoding: 'binary'});
     await fs.writeFile(uploadPathMetadata, JSON.stringify(metadata, null, 2));
 
     console.log('file download success', fileId);
   } catch (err) {
-    console.log(err);
-    res.status(500).send('');
+    console.log('download, catch err', err);    
   }
 });
 
