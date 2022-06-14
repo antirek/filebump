@@ -22,13 +22,20 @@ router.use(checkAuthHeader({
   status401onFail: true,
 }));
 
+const requestCounter = 0;
+const requestFailCounter = 0;
+
 router.post('/', async (req, res) => {
+  requestCounter++;
+  const log = (...args) => {
+    console.log(`[${requestCounter}] /download`, ...args);
+  }
   try {
     const downloadUrl = req.body.url;
     const fileId = getId();
 
     const key = req.get(authHeader);
-    console.log('download with key', key);
+    log('download', {key, fileId});
   
     res.json({
       fileId,
@@ -46,6 +53,7 @@ router.post('/', async (req, res) => {
       dateCreated: (+new Date()/1000).toFixed(0),
       key,
     };
+    log({metadata});
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
@@ -57,9 +65,11 @@ router.post('/', async (req, res) => {
     await fs.writeFile(uploadPathFile, response.data, {encoding: 'binary'});
     await fs.writeFile(uploadPathMetadata, JSON.stringify(metadata, null, 2));
 
-    console.log('file download success', fileId);
+    log('file download success', fileId);
   } catch (err) {
-    console.log('download, catch err', err);    
+    requestFailCounter++;
+    log('download, failCounter:', requestFailCounter);
+    log('download, catch err', err);
   }
 });
 
