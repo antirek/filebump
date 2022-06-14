@@ -22,8 +22,8 @@ router.use(checkAuthHeader({
   status401onFail: true,
 }));
 
-const requestCounter = 0;
-const requestFailCounter = 0;
+let requestCounter = 0;
+let requestFailCounter = 0;
 
 router.post('/', async (req, res) => {
   requestCounter++;
