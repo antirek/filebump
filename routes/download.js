@@ -4,6 +4,7 @@ const path = require('path');
 const config = require('config');
 const axios = require('axios');
 const checkAuthHeader = require('check-auth-header');
+const { performance } = require('node:perf_hooks');
 
 const {getId} = require('../getId');
 
@@ -26,7 +27,8 @@ let requestCounter = 0;
 let requestFailCounter = 0;
 
 router.post('/', async (req, res) => {
-  requestCounter++;
+  const startTime = performance.now();
+  requestCounter++;  
   const log = (...args) => {
     console.log(`[${requestCounter}] /download`, ...args);
   }
@@ -71,6 +73,9 @@ router.post('/', async (req, res) => {
     log('download, failCounter:', requestFailCounter);
     log('download, catch err', err);
   }
+
+  const duration = Number((performance.now() - startTime)/1000).toFixed(1);
+  log('performance:', duration);
 });
 
 module.exports = router;
