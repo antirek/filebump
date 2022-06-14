@@ -30,14 +30,14 @@ router.post('/', async (req, res) => {
   const startTime = performance.now();
   requestCounter++;  
   const log = (...args) => {
-    console.log(`[${requestCounter}] /download`, ...args);
+    console.log(`[download:${requestCounter}]`, ...args);
   }
   try {
     const downloadUrl = req.body.url;
     const fileId = getId();
 
     const key = req.get(authHeader);
-    log('download', {key, fileId});
+    log('request for download', {key, fileId, downloadUrl});
   
     res.json({
       fileId,
@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
     log('download, catch err', err);
   }
 
-  const duration = Number((performance.now() - startTime)/1000).toFixed(1);
+  const duration = Number((performance.now() - startTime)/1000).toFixed(2);
   log('performance:', duration);
 });
 
