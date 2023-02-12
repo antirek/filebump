@@ -1,9 +1,9 @@
 module.exports = {
-  port: 3007,
-  baseUrl: 'http://localhost:3000',
-  uploadDir: '/tmp/uploads',
+  port: 3000,
+  baseUrl: 'https://server.com',
+  uploadDir: '/uploads',
   keys: [
-    'test',
-    'test2',
+    'testKey1',
+    'testKey2',
   ],
 };

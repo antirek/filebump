@@ -1,0 +1,16 @@
+version: '2.4'
+services:
+  server:
+    image: filebump:23.2.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - ./config:/etc/filebump
+      - "/var/store/filebump/files:/uploads"
+    environment:
+      - NODE_ENV=production
+      - NODE_CONFIG_DIR=/etc/filebump
+      - TZ=Europe/Moscow
+    restart: always
+    command: npm run start-server
