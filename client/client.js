@@ -7,7 +7,7 @@ class FilebumpClient {
     this.key = key;
   }
 
-  async upload(data, filename) {
+  async upload(data, filename, fileId = null) {
     const form = new FormData();
     form.append('file', data, filename);
 
@@ -18,8 +18,9 @@ class FilebumpClient {
       }
     };
 
-    const url = `${this.url}/upload`;
-    return await axios.post(url, form, request_config);    
+    const qs = fileId ? `?fileId=${fileId}` : '';
+    const url = `${this.url}/upload${qs}`;
+    return await axios.post(url, form, request_config);
   }
 
   async download(downloadUrl) {
