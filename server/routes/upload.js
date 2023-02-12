@@ -7,7 +7,6 @@ const config = require('config');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 
-
 const {getId} = require('../getId');
 
 const prepareMetadata = (uploadedFile) => {
