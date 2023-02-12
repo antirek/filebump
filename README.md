@@ -6,7 +6,7 @@ Upload, download files to server and load files from server
 
 ### upload
 
-вы можете отправить файл на filebumo и получить ссылку для скачивания файлв
+вы можете отправить файл на filebump и получить ссылку для скачивания файла
 
 
 ### download 
@@ -22,7 +22,7 @@ Upload, download files to server and load files from server
 curl \
   -F "file=@test.png" \
   -H "X-API-Key: test" \
-  http://localhost:3000/upload
+  https://server.com/upload
 `````
 
 ### download
@@ -33,9 +33,16 @@ curl \
   -X POST \
   -d '{"url":"https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg"}' \
   -H "X-API-Key: test" \
-  http://localhost:3007/download
+  https://server.com/download
 
 `````
+
+### npm filebump-client
+
+для использования в приложениях под nodejs используйте filebump-client
+
+> npm install filebump-client
+
 
 ## скачивание файла
 
