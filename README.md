@@ -43,6 +43,8 @@ curl \
 
 > npm install filebump-client
 
+примеры использования в client-samples
+
 
 ## скачивание файла
 
@@ -74,3 +76,7 @@ curl \
 
 - keys - массив ключей для загрузки (чтобы только свои могли загружать файлы)
 
+
+## docker
+
+в репо лежит Dockerfile для сборки image и docker-compose.yml как пример использования filebump
