@@ -54,15 +54,22 @@ router.use(checkAuthHeader({
   status401onFail: true,
 }));
 
+let requestCounter = 0;
+
 router.post('/', async (req, res) => {
+  requestCounter++;
+  const log = (...args) => {
+    console.log(`[upload:${requestCounter}]`, ...args);
+  }
   if (!req.files || Object.keys(req.files).length === 0) {
+    log('no file');
     return res.status(400).send('No files were uploaded.');
   }
 
   const key = req.get(authHeader);
-  console.log('upload with key', key);
+  log('upload with key', key);
 
-  console.log(req.query.fileId);
+  log('external fileId:', req.query.fileId);
 
   const fileId = req.query.fileId ? req.query.fileId : getId();
   const uploadedFile = req.files.file;
@@ -80,16 +87,18 @@ router.post('/', async (req, res) => {
     fileId,
     key,
   };
-  console.log('upload', JSON.stringify(metadata));
+  log('metadata', JSON.stringify(metadata));
 
   await uploadedFile.mv(uploadPathFile);
   await fs.writeFile(uploadPathMetadata, JSON.stringify(metadata, null, 2));
 
-  res.json({
+  const resData = {
     fileId,
     url: `${config.baseUrl}/file/${fileId}`,
     status: 'OK',
-  });
+  };
+  log('<<< response', resData);
+  res.json(resData);
 
   await postUploadAction(metadata);
 });

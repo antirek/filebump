@@ -5,11 +5,18 @@ const config = require('config');
 
 const router = express.Router();
 
+let requestCounter = 0;
+// let requestFailCounter = 0;
+
 const processFileGet = async(req, res) => {
+  requestCounter++;
+  const log = (...args) => {
+    console.log(`[file:${requestCounter}]`, ...args);
+  }
   try {
     let isRequiredMp3 = false;    
     const {fileId, filename} = req.params;
-    console.log('GET', JSON.stringify({fileId, filename}));
+    log('>>> get file', JSON.stringify({fileId, filename}));
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
@@ -18,7 +25,7 @@ const processFileGet = async(req, res) => {
 
     if (filename && path.extname(filename) === '.mp3') {
       uploadPathFile = uploadPathFile + '.mp3';
-      console.log('required mp3 file', uploadPathFile);
+      log('required mp3 file', uploadPathFile);
       isRequiredMp3 = true;
     }
     
@@ -28,13 +35,13 @@ const processFileGet = async(req, res) => {
       await fs.access(uploadPathFile);
     } catch (e) {
       res.status(404).json({status: 'NOT FOUND'});
-      console.log('not found file', fileId);
+      log('not found file', fileId);
       return;
     }
     
     const metadataFileData = await fs.readFile(uploadPathMetadata);
     const metadata = JSON.parse(metadataFileData);
-    console.log('metadata', metadata);
+    log('metadata', metadata);
 
     res.sendFile(uploadPathFile, {
       headers: {
@@ -42,7 +49,7 @@ const processFileGet = async(req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+    log(err);
     res.status(500).send();
   }
 }

@@ -1,0 +1,13 @@
+.idea
+node_modules
+
+.editorconfig
+
+apps/sender/config/test.js
+config/test.js
+
+.eslintcache
+
+apps/admin-web/public/dist
+
+tmp

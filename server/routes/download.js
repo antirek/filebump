@@ -28,7 +28,7 @@ let requestFailCounter = 0;
 
 router.post('/', async (req, res) => {
   const startTime = performance.now();
-  requestCounter++;  
+  requestCounter++;
   const log = (...args) => {
     console.log(`[download:${requestCounter}]`, ...args);
   }
@@ -37,13 +37,14 @@ router.post('/', async (req, res) => {
     const fileId = getId();
 
     const key = req.get(authHeader);
-    log('request for download', {key, fileId, downloadUrl});
-  
-    res.json({
+    log('>>> request', {key, fileId, downloadUrl});
+    const resData = {
       fileId,
       url: `${config.baseUrl}/file/${fileId}`,
       status: 'DOWNLOAD',
-    });
+    };
+    log('<<< response:', resData);
+    res.json(resData);
 
     const response = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
     
