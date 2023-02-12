@@ -39,7 +39,7 @@ curl \
 
 ### npm filebump-client
 
-для использования в приложениях под nodejs используйте filebump-client
+в приложениях nodejs используйте filebump-client
 
 > npm install filebump-client
 
@@ -55,7 +55,7 @@ curl \
 }
 `````
 
-## конфигурирования
+## конфигурирование
 
 необходимо указать 
 
