@@ -80,3 +80,8 @@ curl \
 ## docker
 
 в репо лежит Dockerfile для сборки image и docker-compose.yml как пример использования filebump
+
+
+## Ссылки
+
+- [filebump — хостинг файлов по API](https://habr.com/ru/post/716450/)
