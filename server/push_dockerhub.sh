@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker push antirek/filebump:24.1.1
+docker push antirek/filebump:24.1.2
