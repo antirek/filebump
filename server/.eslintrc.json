@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "google"
+  ],
+  "parser": "@babel/eslint-parser",
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "plugins": [
+    "no-floating-promise"
+  ],
+  "rules": {
+    "require-jsdoc" : 0,
+    "valid-jsdoc": 0,
+    "max-len": ["error", {
+      "code": 120,
+      "comments": 120
+    }],
+    "new-cap": ["error", { 
+      "newIsCap": false,
+      "properties": false
+    }],
+    "no-floating-promise/no-floating-promise": 2,
+    "no-unused-vars": 1,
+    "no-invalid-this": 0
+  }
+}

@@ -29,21 +29,21 @@ const postUploadAction = async (metadata) => {
     const fileId = metadata.fileId;
 
     const subDirId = fileId.substring(0, 4);
-  
+
     const subDirPath = path.join(config.uploadDir, subDirId);
-    await fs.mkdir(subDirPath, { recursive: true });
-    
+    await fs.mkdir(subDirPath, {recursive: true});
+
     const uploadPathFile = path.join(subDirPath, fileId);
-    const { stdout, stderr } = await exec(`ffmpeg -i ${uploadPathFile} ${uploadPathFile}.mp3`);
+    const {stdout, stderr} = await exec(`ffmpeg -i ${uploadPathFile} ${uploadPathFile}.mp3`);
     console.log(stdout, stderr);
   }
-}
+};
 
 const authHeader = config.authHeader || 'X-API-Key';
 const authFn = (key) => {
   if (!key) return false;
   return config.keys.includes(key);
-}
+};
 
 const router = express.Router();
 router.use(fileUpload());
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
   requestCounter++;
   const log = (...args) => {
     console.log(`[upload:${requestCounter}]`, ...args);
-  }
+  };
   if (!req.files || Object.keys(req.files).length === 0) {
     log('no file');
     return res.status(400).send('No files were uploaded.');
@@ -75,13 +75,13 @@ router.post('/', async (req, res) => {
   const uploadedFile = req.files.file;
 
   const subDirId = fileId.substring(0, 4);
-  
+
   const subDirPath = path.join(config.uploadDir, subDirId);
-  await fs.mkdir(subDirPath, { recursive: true });
-  
+  await fs.mkdir(subDirPath, {recursive: true});
+
   const uploadPathFile = path.join(subDirPath, fileId);
   const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
-  
+
   const metadata = {
     ...prepareMetadata(uploadedFile),
     fileId,

@@ -12,9 +12,9 @@ const config = {
     'test',
     'test2',
   ],
-}
+};
 
-let server, client;
+let server; let client;
 
 beforeAll(() => {
   const app = createApp(config);
@@ -30,28 +30,28 @@ describe('test upload', () => {
     const filename = 'spec/test.pdf';
     const data = await fs.readFile(filename);
 
-    const resp = await client.upload(data, filename);  
+    const resp = await client.upload(data, filename);
     console.log(resp.data);
     const successResponse = resp.data;
     expect(successResponse.fileId).toBeDefined();
     expect(successResponse.url).toBeDefined();
     expect(successResponse.status).toBeDefined();
-  });  
+  });
 
-  it('audio/ogg with post upload action', async () => {    
+  it('audio/ogg with post upload action', async () => {
     const filename = 'spec/test.ogg';
     const data = await fs.readFile(filename);
 
-    const resp = await client.upload(data, filename);  
+    const resp = await client.upload(data, filename);
     console.log(resp.data);
     const successResponse = resp.data;
     expect(successResponse.fileId).toBeDefined();
     expect(successResponse.url).toBeDefined();
     expect(successResponse.status).toBeDefined();
-  });  
+  });
 });
 
 afterAll(async () => {
-  await delay(2000)
+  await delay(2000);
   server.close();
 });

@@ -1,4 +1,8 @@
-FROM node:18.13.0
+FROM node:20.10.0
+
+RUN apt-get update \
+    && apt-get install -y ffmpeg \
+    && apt-get clean
 
 ARG NODE_ENV
 

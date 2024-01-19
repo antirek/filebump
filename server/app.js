@@ -14,8 +14,8 @@ const createApp = (config) => {
   app.use('/file', fileRouter);
 
   return app;
-}
+};
 
 module.exports = {
   createApp,
-}
+};

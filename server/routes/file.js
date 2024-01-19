@@ -8,13 +8,13 @@ const router = express.Router();
 let requestCounter = 0;
 // let requestFailCounter = 0;
 
-const processFileGet = async(req, res) => {
+const processFileGet = async (req, res) => {
   requestCounter++;
   const log = (...args) => {
     console.log(`[file:${requestCounter}]`, ...args);
-  }
+  };
   try {
-    let isRequiredMp3 = false;    
+    let isRequiredMp3 = false;
     const {fileId, filename} = req.params;
     log('>>> get file', JSON.stringify({fileId, filename}));
 
@@ -28,9 +28,9 @@ const processFileGet = async(req, res) => {
       log('required mp3 file', uploadPathFile);
       isRequiredMp3 = true;
     }
-    
+
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
-    
+
     try {
       await fs.access(uploadPathFile);
     } catch (e) {
@@ -38,7 +38,7 @@ const processFileGet = async(req, res) => {
       log('not found file', fileId);
       return;
     }
-    
+
     const metadataFileData = await fs.readFile(uploadPathMetadata);
     const metadata = JSON.parse(metadataFileData);
     log('metadata', metadata);
@@ -52,7 +52,7 @@ const processFileGet = async(req, res) => {
     log(err);
     res.status(500).send();
   }
-}
+};
 
 router.get('/:fileId', processFileGet);
 router.get('/:fileId/:filename', processFileGet);

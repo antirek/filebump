@@ -4,7 +4,7 @@ const path = require('path');
 const config = require('config');
 const axios = require('axios');
 const checkAuthHeader = require('check-auth-header');
-const { performance } = require('node:perf_hooks');
+const {performance} = require('node:perf_hooks');
 
 const {getId} = require('../getId');
 
@@ -12,7 +12,7 @@ const authHeader = config.authHeader || 'X-API-Key';
 const authFn = (key) => {
   if (!key) return false;
   return config.keys.includes(key);
-}
+};
 
 const router = express.Router();
 router.use(express.json());
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
   requestCounter++;
   const log = (...args) => {
     console.log(`[download:${requestCounter}]`, ...args);
-  }
+  };
   try {
     const downloadUrl = req.body.url;
     const fileId = getId();
@@ -46,8 +46,8 @@ router.post('/', async (req, res) => {
     log('<<< response:', resData);
     res.json(resData);
 
-    const response = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
-    
+    const response = await axios.get(downloadUrl, {responseType: 'arraybuffer'});
+
     const metadata = {
       fileId,
       downloadUrl,
@@ -60,8 +60,8 @@ router.post('/', async (req, res) => {
 
     const subDirId = fileId.substring(0, 4);
     const subDirPath = path.join(config.uploadDir, subDirId);
-    await fs.mkdir(subDirPath, { recursive: true });
-  
+    await fs.mkdir(subDirPath, {recursive: true});
+
     const uploadPathFile = path.join(subDirPath, fileId);
     const uploadPathMetadata = path.join(subDirPath, fileId + '.json');
 
