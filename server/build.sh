@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build . -t antirek/filebump:24.1.2
+docker build . -t antirek/filebump:24.1.3

@@ -20,11 +20,11 @@ const prepareMetadata = (uploadedFile) => {
 };
 
 const postUploadAction = async (metadata) => {
-  if (metadata.mimetype !== 'audio/ogg') {
+  if (metadata.mimetype !== 'audio/ogg' && metadata.mimetype !== 'audio/mpeg') {
     return console.log(`${metadata.mimetype}: post actions for uploaded mimetype is not defined`);
   }
 
-  if (metadata.mimetype === 'audio/ogg') {
+  if (metadata.mimetype === 'audio/ogg' || metadata.mimetype === 'audio/mpeg') {
     console.log(`${metadata.mimetype}: start post upload action`);
     const fileId = metadata.fileId;
 
